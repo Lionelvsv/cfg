@@ -1,13 +1,7 @@
 --[[
-  ____ _____ 
- |  _ \_   _|  Derek Taylor (DistroTube)
- | | | || |    http://www.youtube.com/c/DistroTube
- | |_| || |    http://www.gitlab.com/dwt1/ 
- |____/ |_| 
- 
- My awesome window manager configuration. Provided here for those that want to examine or use
- my config in part or in whole. Take what works for you; leave the rest!
- 
+
+ My custom config
+
 --]]
 
 -- {{{  libraries
@@ -91,13 +85,14 @@ local themes = {
 }
 
 -- choose your theme here
-local chosen_theme = themes[1]
+--local chosen_theme = themes[1]
 
+local chosen_theme = "powerarrow-blue"
 local theme_path = string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), chosen_theme)
 beautiful.init(theme_path)
 
 -- modkey or mod4 = super key
-local modkey       = "Mod4"
+local modkey       = "Mod1"
 local altkey       = "Mod1"
 local modkey1      = "Control"
 
@@ -110,7 +105,7 @@ local filemanager       = "thunar"
 local mailclient        = "geary"
 local mediaplayer       = "vlc"
 local scrlocker         = "slimlock"
-local terminal          = "st"
+local terminal          = "alacritty"
 local virtualmachine    = "virtualbox"
 
 -- awesome variables
@@ -285,7 +280,7 @@ globalkeys = my_table.join(
         {description = "surfraw web search" , group = "dmenu scripts" }),
     awful.key({ altkey, "Control"  }, "t", function () awful.util.spawn( "./.dmenu/dmenu-trading.sh" ) end,
         {description = "trading programs" , group = "dmenu scripts" }),
-        
+
     -- My applications (Super+Alt+Key)
     awful.key({ modkey, altkey }, "a", function () awful.util.spawn( terminal.." -e ncpamixer" ) end,
         {description = "ncpamixer" , group = "terminal apps" }),
@@ -900,3 +895,25 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Autostart applications
 awful.spawn.with_shell("~/.config/awesome/autostart.sh")
 awful.spawn.with_shell("compton --config  $HOME/.config/compton/compton.conf")
+--awful.util.spawn("conky")
+--awful.util.spawn("nitrogen --restore")
+-- awful.util.spawn("xinput -disable 'pointer:ELAN0732:00 04F3:2538"")
+--awful.util.spawn("sleep 20 && numlockx on")
+--
+--
+-- Autorun programs
+autorun = true
+autorunApps =
+{
+ --   "firefox",
+"xinput set-prop 'pointer:SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled'  1",
+"xinput -disable 'pointer:ELAN0732:00 04F3:2538'",
+-- eval "$(ssh-agent)"
+
+
+}
+if autorun then
+   for app = 1, #autorunApps do
+       awful.util.spawn(autorunApps[app])
+   end
+end
