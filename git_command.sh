@@ -40,3 +40,5 @@ config add .bashrc .jwmrc .jwmrc-mjwm .lynx.cfg .lynx.lss
 config add .spectrwm.conf .vimrc .zshrc
 config add LICENSE README.md baraction.sh new.sh org-mode-basics-in-doom-emacs.org
 config add git_command.sh
+config add .config/kitty/kitty.conf
+config add .config/kitty/dracula.conf

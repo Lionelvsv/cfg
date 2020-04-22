@@ -264,9 +264,9 @@ globalkeys = my_table.join(
     -- dmenu
     awful.key({ modkey, "Shift" }, "Return",
     function ()
-        awful.spawn(string.format("dmenu_run -i  -nb '#292d3e' -nf '#bbc5ff' -sb '#82AAFF' -sf '#292d3e' -fn 'Mononoki Nerd Font:bold:pixelsize=14'",
-        beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
-	end,
+      awful.spawn(string.format("dmenu_run -i  -nb '#292d3e' -nf '#bbc5ff' -sb '#82AAFF' -sf '#292d3e' -fn 'Mononoki Nerd Font:bold:pixelsize=14'",
+       beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
+    end,
     {description = "show dmenu", group = "hotkeys"}),
 
     -- My dmenu scripts (Alt+Ctrl+Key)
@@ -906,6 +906,13 @@ autorun = true
 autorunApps =
 {
  --   "firefox",
+--"nm-applet",
+--"xfce4-power-manager",
+--"blueberry-tray",
+--"numlockx on",
+--"volumeicon",
+--"nitrogen --restore",
+--"conky -c $HOME/.config/awesome/system-overview",
 "xinput set-prop 'pointer:SynPS/2 Synaptics TouchPad' 'libinput Tapping Enabled'  1",
 "xinput -disable 'pointer:ELAN0732:00 04F3:2538'",
 -- eval "$(ssh-agent)"

@@ -37,6 +37,8 @@ POWERLEVEL9K_VI_INSERT_MODE_STRING='INSERT'
 POWERLEVEL9K_VI_COMMAND_MODE_STRING='NORMAL'﻿
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status history time)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+
 ZLE_RPROMPT_INDENT=0
 
 # Set list of themes to pick from when loading at random
@@ -190,7 +192,7 @@ if [ -f /etc/bash.command-not-found ]; then
 fi
 
 ### RANDOM COLOR SCRIPT ###
-#/opt/shell-color-scripts/colorscript.sh random
+colorscript random
 
 ### SETS VI MODE ###
 bindkey -v
@@ -200,6 +202,9 @@ bindkey -v
 source $HOME/.cargo/env
 
 source /home/lionelvsv/.config/broot/launcher/bash/br
+
+
+
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
