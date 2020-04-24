@@ -9,7 +9,7 @@ config add .config/castero/
 config add .config/compton/
 config add .config/conky/
 config add .config/herbstluftwm/
-config add .config/nvim/
+config add .config/nvim/init.vim
 config add .config/openbox/
 config add .config/polybar/
 config add .config/qtile/

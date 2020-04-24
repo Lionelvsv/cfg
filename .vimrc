@@ -23,6 +23,8 @@ Plugin 'jreybert/vimagit'
 Plugin 'severin-lemaignan/vim-minimap'
 Plugin 'ap/vim-css-color'                           " Color previews for CSS
 Plugin 'tpope/vim-surround'                         " Change surrounding marks
+Plugin 'dense-analysis/ale'                        " linting for c++
+Plugin 'ycm-core/YouCompleteMe'                    " c++  autocompletion
 
 call vundle#end()		" required, all plugins must appear before this line.
 

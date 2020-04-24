@@ -1,10 +1,10 @@
-"  ____ _____ 
+"  ____ _____
 " |  _ \_   _|  Derek Taylor (DistroTube)
 " | | | || |    http://www.youtube.com/c/DistroTube
 " | |_| || |    http://www.gitlab.com/dwt1/
 " |____/ |_|
-"        
-" A customized init.vim for neovim (https://neovim.io/)     
+"
+" A customized init.vim for neovim (https://neovim.io/)
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -28,7 +28,7 @@ call vundle#begin()		" required, all plugins must appear after this line.
     Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'     " Highlighting Nerdtree
     Plugin 'ryanoasis/vim-devicons'                      " Icons for Nerdtree
 "{{ Productivity }}
-    Plugin 'vimwiki/vimwiki'                             " VimWiki 
+    Plugin 'vimwiki/vimwiki'                             " VimWiki
     Plugin 'jreybert/vimagit'                            " Magit-like plugin for vim
 "{{ Tim Pope Plugins }}
     Plugin 'tpope/vim-surround'                          " Change surrounding marks
@@ -41,6 +41,50 @@ call vundle#begin()		" required, all plugins must appear after this line.
     Plugin 'junegunn/goyo.vim'                           " Distraction-free viewing
     Plugin 'junegunn/limelight.vim'                      " Hyperfocus on a range
     Plugin 'junegunn/vim-emoji'                          " Vim needs emojis!
+"{{ c++  config }}"
+   Plugin 'dense-analysis/ale'                        " linting for c++
+   Plugin 'ycm-core/YouCompleteMe'                    " c++  autocompletion
+"editor config "
+Plugin 'editorconfig/editorconfig-vim'                  " making consistent style
+
+" auto formatter
+Plugin 'rhysd/vim-clang-format'
+
+" nerd commenter
+Plugin 'scrooloose/nerdcommenter'
+
+" airline (powerline)
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+" enhanced highlight
+Plugin 'octol/vim-cpp-enhanced-highlight'
+
+" ctags indexer
+Plugin 'vim-scripts/DfrankUtil'
+Plugin 'vim-scripts/vimprj'
+Plugin 'vim-scripts/indexer.tar.gz'
+
+" UltiSnips
+Plugin 'SirVer/ultisnips'
+
+" easy motion
+Plugin 'easymotion/vim-easymotion'
+
+" A - for switching between source and header files
+Plugin 'vim-scripts/a.vim'
+
+" colorscheme
+"Plug 'wombat256mod.vim'
+Plugin 'nanotech/jellybeans.vim'
+Plugin 'chriskempson/base16-vim'
+Plugin 'morhetz/gruvbox'
+Plugin 'w0ng/vim-hybrid'
+Plugin 'tpope/vim-vividchalk'
+Plugin 'lokaltog/vim-distinguished'
+
+" glsl color
+Plugin 'tikhomirov/vim-glsl'
 
 call vundle#end()		" required, all plugins must appear before this line.
 
@@ -184,7 +228,7 @@ map <Leader>ms :InstantMarkdownStop<CR>      " Kills the preview
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Open terminal inside Vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <Leader>tt :vnew term://bash<CR>
+map <Leader>tt :vnew term://zsh<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mouse Scrolling
@@ -213,14 +257,14 @@ map <Leader>th <C-w>t<C-w>H
 map <Leader>tk <C-w>t<C-w>K
 
 " Removes pipes | that act as seperators on splits
-set fillchars+=vert:\ 
+set fillchars+=vert:\
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Other Stuff
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:python_highlight_all = 1
 
-au! BufRead,BufWrite,BufWritePost,BufNewFile *.org 
+au! BufRead,BufWrite,BufWritePost,BufNewFile *.org
 au BufEnter *.org            call org#SetOrgFileType()
 
 set guioptions-=m  "remove menu bar

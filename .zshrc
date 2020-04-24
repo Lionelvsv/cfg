@@ -174,6 +174,19 @@ alias config="/usr/bin/git --git-dir=$HOME/.cfg --work-tree=$HOME"
 # termbin
 alias tb="nc termbin.com 9999"
 
+#git setup email and name as lionel
+alias gitsetmailpersonal="git config user.email 'lionelvsv@gmail.com'"
+alias gitsetnamepersonal="git config user.name'lionelvsv'"i
+
+# change directory shortcut
+alias learn="cd ~/Documents/learning"
+alias ciu="cd ~/Documents/learning/coding-interview-university"
+
+# c++  
+alias build="g++ -std=c++17 -Wshadow -Wall -o "%e" "%f" -g -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG"
+alias compile="g++ -std=c++17 -Wshadow -Wall -o "%e" "%f" -O2 -Wno-unused-result"
+
+
 ### SET VI MODE IN BASH SHELL
 set -o vi
 
@@ -208,3 +221,13 @@ source /home/lionelvsv/.config/broot/launcher/bash/br
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+#flutter config
+export PATH="$PATH:/home/lionelvsv/from_source/flutter/bin"
+# go config
+export GOROOT=/usr/local/go  
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
+#nvm config
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
