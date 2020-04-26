@@ -13,7 +13,7 @@ fi
 
 PATH="$HOME/.local/bin${PATH:+:${PATH}}"
 EDITOR="nvim"
-export TERM="st-256color"
+export TERM="xterm"
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -194,7 +194,7 @@ set -o vi
 export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist noma' -\""
 
 ### BASH POWERLINE ###
-source ~/.bash-powerline.sh
+#source ~/.bash-powerline.sh
 
 ### BROOT ###
 #source /usr/local/bin/broot
@@ -205,7 +205,7 @@ if [ -f /etc/bash.command-not-found ]; then
 fi
 
 ### RANDOM COLOR SCRIPT ###
-colorscript random
+#colorscript random
 
 ### SETS VI MODE ###
 bindkey -v
@@ -214,7 +214,7 @@ bindkey -v
 # rust config
 source $HOME/.cargo/env
 
-source /home/lionelvsv/.config/broot/launcher/bash/br
+#source /home/lionelvsv/.config/broot/launcher/bash/br
 
 
 
@@ -231,3 +231,11 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 #nvm config
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# broot config
+source /Users/lionelvsv/Library/Preferences/org.dystroy.broot/launcher/bash/br
+#go config
+export GOPATH=$HOME/go-workspace # don't forget to change your path correctly!
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
+
