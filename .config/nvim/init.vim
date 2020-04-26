@@ -1,5 +1,4 @@
 "  ____ _____
-" |  _ \_   _|  Derek Taylor (DistroTube)
 " | | | || |    http://www.youtube.com/c/DistroTube
 " | |_| || |    http://www.gitlab.com/dwt1/
 " |____/ |_|
@@ -45,10 +44,11 @@ call vundle#begin()		" required, all plugins must appear after this line.
    Plugin 'dense-analysis/ale'                        " linting for c++
    Plugin 'ycm-core/YouCompleteMe'                    " c++  autocompletion
 "editor config "
-Plugin 'editorconfig/editorconfig-vim'                  " making consistent style
+    Plugin 'editorconfig/editorconfig-vim'                  " making consistent style
 
-" auto formatter
-Plugin 'rhysd/vim-clang-format'
+" au
+" to formatter
+    Plugin 'rhysd/vim-clang-format'
 
 " nerd commenter
 Plugin 'scrooloose/nerdcommenter'
@@ -272,3 +272,21 @@ set guioptions-=T  "remove toolbar
 set guioptions-=r  "remove right-hand scroll bar
 set guioptions-=L  "remove left-hand scroll bar
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Source vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <C-s> :source ~/.config/nvim/init.vim<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General Setttings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"set cursorline
+set statusline=
+set statusline+=\ %m
+set statusline+=\ %y
+set statusline+=\ %r
+set statusline+=\ %F
+
+set statusline+=%= " Right side settings
+set statusline+=\ %p%%
+set statusline+=\ [%n]
