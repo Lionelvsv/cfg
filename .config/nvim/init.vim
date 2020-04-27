@@ -40,6 +40,7 @@ call vundle#begin()		" required, all plugins must appear after this line.
     Plugin 'junegunn/goyo.vim'                           " Distraction-free viewing
     Plugin 'junegunn/limelight.vim'                      " Hyperfocus on a range
     Plugin 'junegunn/vim-emoji'                          " Vim needs emojis!
+    Plugin 'junegunn/fzf' , { 'do': { -> fzf#install() } } " Vim fuzzy finding
 "{{ c++  config }}"
    Plugin 'dense-analysis/ale'                        " linting for c++
    Plugin 'ycm-core/YouCompleteMe'                    " c++  autocompletion
