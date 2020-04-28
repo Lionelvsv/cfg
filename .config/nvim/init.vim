@@ -12,81 +12,88 @@ filetype off                  " required
 " => Vundle For Managing Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-
-call vundle#begin()		" required, all plugins must appear after this line.
+" set the runtime path to include vim-plug and initialize
+" Specify a directory for plugins
+" - For Neovim: stdpath('data') . '/plugged'
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
 "{{ The Basics }}
-    Plugin 'gmarik/Vundle.vim'                           " Vundle
-    Plugin 'itchyny/lightline.vim'                       " Lightline statusbar
-    Plugin 'suan/vim-instant-markdown', {'rtp': 'after'} " Markdown Preview
-    Plugin 'frazrepo/vim-rainbow'
+    "Plug 'gmarik/Vundle.vim'                           " Vundle
+    Plug 'itchyny/lightline.vim'                       " Lightline statusbar
+    Plug 'suan/vim-instant-markdown', {'rtp': 'after'} " Markdown Preview
+    Plug 'frazrepo/vim-rainbow'
 "{{ File management }}
-    Plugin 'vifm/vifm.vim'                               " Vifm
-    Plugin 'scrooloose/nerdtree'                         " Nerdtree
-    Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'     " Highlighting Nerdtree
-    Plugin 'ryanoasis/vim-devicons'                      " Icons for Nerdtree
+    Plug 'vifm/vifm.vim'                               " Vifm
+    Plug 'scrooloose/nerdtree'                         " Nerdtree
+    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'     " Highlighting Nerdtree
+    Plug 'ryanoasis/vim-devicons'                      " Icons for Nerdtree
 "{{ Productivity }}
-    Plugin 'vimwiki/vimwiki'                             " VimWiki
-    Plugin 'jreybert/vimagit'                            " Magit-like plugin for vim
-"{{ Tim Pope Plugins }}
-    Plugin 'tpope/vim-surround'                          " Change surrounding marks
+    Plug 'vimwiki/vimwiki'                             " VimWiki
+    Plug 'jreybert/vimagit'                            " Magit-like Plugin for vim
+"{{ Tim Pope Plugs }}
+    Plug 'tpope/vim-surround'                          " Change surrounding marks
 "{{ Syntax Highlighting and Colors }}
-    Plugin 'PotatoesMaster/i3-vim-syntax'                " i3 config highlighting
-    Plugin 'kovetskiy/sxhkd-vim'                         " sxhkd highlighting
-    Plugin 'vim-python/python-syntax'                    " Python highlighting
-    Plugin 'ap/vim-css-color'                            " Color previews for CSS
-"{{ Junegunn Choi Plugins }}
-    Plugin 'junegunn/goyo.vim'                           " Distraction-free viewing
-    Plugin 'junegunn/limelight.vim'                      " Hyperfocus on a range
-    Plugin 'junegunn/vim-emoji'                          " Vim needs emojis!
+    Plug 'PotatoesMaster/i3-vim-syntax'                " i3 config highlighting
+    Plug 'kovetskiy/sxhkd-vim'                         " sxhkd highlighting
+    Plug 'vim-python/python-syntax'                    " Python highlighting
+    Plug 'ap/vim-css-color'                            " Color previews for CSS
+"{{ Junegunn Choi Plugs }}
+    Plug 'junegunn/goyo.vim'                           " Distraction-free viewing
+    Plug 'junegunn/limelight.vim'                      " Hyperfocus on a range
+    Plug 'junegunn/vim-emoji'                          " Vim needs emojis!
+    Plug 'junegunn/fzf'                                " adds fuzzy explorer
 "{{ c++  config }}"
-   Plugin 'dense-analysis/ale'                        " linting for c++
-   Plugin 'ycm-core/YouCompleteMe'                    " c++  autocompletion
+   Plug 'dense-analysis/ale'                        " linting for c++
+   Plug 'ycm-core/YouCompleteMe'                    " c++  autocompletion
 "editor config "
-    Plugin 'editorconfig/editorconfig-vim'                  " making consistent style
+    Plug 'editorconfig/editorconfig-vim'                  " making consistent style
+"add coc "
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}   "adds coc explorer support
+
 
 " au
 " to formatter
-    Plugin 'rhysd/vim-clang-format'
+    Plug 'rhysd/vim-clang-format'
 
 " nerd commenter
-Plugin 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdcommenter'
 
 " airline (powerline)
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " enhanced highlight
-Plugin 'octol/vim-cpp-enhanced-highlight'
+Plug 'octol/vim-cpp-enhanced-highlight'
 
 " ctags indexer
-Plugin 'vim-scripts/DfrankUtil'
-Plugin 'vim-scripts/vimprj'
-Plugin 'vim-scripts/indexer.tar.gz'
+Plug 'vim-scripts/DfrankUtil'
+Plug 'vim-scripts/vimprj'
+Plug 'vim-scripts/indexer.tar.gz'
 
 " UltiSnips
-Plugin 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips'
 
 " easy motion
-Plugin 'easymotion/vim-easymotion'
+Plug 'easymotion/vim-easymotion'
 
 " A - for switching between source and header files
-Plugin 'vim-scripts/a.vim'
+Plug 'vim-scripts/a.vim'
 
 " colorscheme
 "Plug 'wombat256mod.vim'
-Plugin 'nanotech/jellybeans.vim'
-Plugin 'chriskempson/base16-vim'
-Plugin 'morhetz/gruvbox'
-Plugin 'w0ng/vim-hybrid'
-Plugin 'tpope/vim-vividchalk'
-Plugin 'lokaltog/vim-distinguished'
+Plug 'nanotech/jellybeans.vim'
+Plug 'chriskempson/base16-vim'
+Plug 'morhetz/gruvbox'
+Plug 'w0ng/vim-hybrid'
+Plug 'tpope/vim-vividchalk'
+Plug 'lokaltog/vim-distinguished'
 
 " glsl color
-Plugin 'tikhomirov/vim-glsl'
+Plug 'tikhomirov/vim-glsl'
 
-call vundle#end()		" required, all plugins must appear before this line.
+" Initialize plugin system
+call plug#end()
+
 
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
@@ -110,7 +117,7 @@ set incsearch                   " Incremental search
 set nobackup                    " No auto backups
 set noswapfile                  " No swap
 set t_Co=256                    " Set if term supports 256 colors.
-set number relativenumber       " Display line numbers
+set number number       " Display line numbers
 syntax enable
 let g:rehash256 = 1
 
@@ -120,13 +127,17 @@ let g:rehash256 = 1
 " Remap ESC to ii
 :imap ii <Esc>
 
+:nmap <space>e :CocCommand explorer<CR>
+
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Status Line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " The lightline.vim theme
 let g:lightline = {
-      \ 'colorscheme': 'darcula',
-      \ }
+            \ 'colorscheme': 'darcula',
+            \ }
 
 " Always show statusline
 set laststatus=2
