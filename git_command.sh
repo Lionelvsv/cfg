@@ -42,3 +42,4 @@ config add LICENSE README.md baraction.sh new.sh org-mode-basics-in-doom-emacs.o
 config add git_command.sh
 config add .config/kitty/kitty.conf
 config add .config/kitty/dracula.conf
+config add .config/karabiner/karabiner.json
