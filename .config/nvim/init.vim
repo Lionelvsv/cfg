@@ -12,95 +12,82 @@ filetype off                  " required
 " => Vundle For Managing Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-
-call vundle#begin()		" required, all plugins must appear after this line.
+" set the runtime path to include vim-plug and initialize
+" Specify a directory for plugins
+" - For Neovim: stdpath('data') . '/plugged'
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
 "{{ The Basics }}
-    Plugin 'gmarik/Vundle.vim'                           " Vundle
-    Plugin 'itchyny/lightline.vim'                       " Lightline statusbar
-    Plugin 'suan/vim-instant-markdown', {'rtp': 'after'} " Markdown Preview
-    Plugin 'frazrepo/vim-rainbow'
+    Plug 'itchyny/lightline.vim'                       " Lightline statusbar
+    Plug 'suan/vim-instant-markdown', {'rtp': 'after'} " Markdown Preview
+    Plug 'frazrepo/vim-rainbow'
 "{{ File management }}
-    Plugin 'vifm/vifm.vim'                               " Vifm
-    Plugin 'scrooloose/nerdtree'                         " Nerdtree
-    Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'     " Highlighting Nerdtree
-    Plugin 'ryanoasis/vim-devicons'                      " Icons for Nerdtree
+    Plug 'vifm/vifm.vim'                               " Vifm
+    Plug 'scrooloose/nerdtree'                         " Nerdtree
+    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'     " Highlighting Nerdtree
+    Plug 'ryanoasis/vim-devicons'                      " Icons for Nerdtree
 "{{ Productivity }}
-    Plugin 'vimwiki/vimwiki'                             " VimWiki
-    Plugin 'jreybert/vimagit'                            " Magit-like plugin for vim
-"{{ Tim Pope Plugins }}
-    Plugin 'tpope/vim-surround'                          " Change surrounding marks
+    Plug 'vimwiki/vimwiki'                             " VimWiki
+    Plug 'jreybert/vimagit'                            " Magit-like plugin for vim
+"{{ Tim Pope Plugs }}
+    Plug 'tpope/vim-surround'                          " Change surrounding marks
 "{{ Syntax Highlighting and Colors }}
-    Plugin 'PotatoesMaster/i3-vim-syntax'                " i3 config highlighting
-    Plugin 'kovetskiy/sxhkd-vim'                         " sxhkd highlighting
-    Plugin 'vim-python/python-syntax'                    " Python highlighting
-    Plugin 'ap/vim-css-color'                            " Color previews for CSS
-"{{ Junegunn Choi Plugins }}
-    Plugin 'junegunn/goyo.vim'                           " Distraction-free viewing
-    Plugin 'junegunn/limelight.vim'                      " Hyperfocus on a range
-    Plugin 'junegunn/vim-emoji'                          " Vim needs emojis!
-    Plugin 'junegunn/fzf' , { 'do': { -> fzf#install() } } " Vim fuzzy finding
+    Plug 'PotatoesMaster/i3-vim-syntax'                " i3 config highlighting
+    Plug 'kovetskiy/sxhkd-vim'                         " sxhkd highlighting
+   " Plug 'vim-python/python-syntax'                    " Python highlighting
+    Plug 'ap/vim-css-color'                            " Color previews for CSS
+"{{ Junegunn Choi Plugs }}
+    Plug 'junegunn/goyo.vim'                           " Distraction-free viewing
+    Plug 'junegunn/limelight.vim'                      " Hyperfocus on a range
+    Plug 'junegunn/vim-emoji'                          " Vim needs emojis!
+    Plug 'junegunn/fzf' , { 'do': { -> fzf#install() } } " Vim fuzzy finding
 "{{ c++  config }}"
-   Plugin 'dense-analysis/ale'                        " linting for c++
-   Plugin 'ycm-core/YouCompleteMe'                    " c++  autocompletion
+   Plug 'dense-analysis/ale'                        " linting for c++
+   "Plug 'ycm-core/YouCompleteMe'                    " c++  autocompletion
 "editor config "
-    Plugin 'editorconfig/editorconfig-vim'                  " making consistent style
+    Plug 'editorconfig/editorconfig-vim'                  " making consistent style
+"add coc "
+ "   Plug 'neoclide/coc.nvim', {'branch': 'release'}   "adds coc explorer support
 
-" au
+" which key pressed
+  "  Plug 'liuchengxu/vim-which-key'
+
 " to formatter
-    Plugin 'rhysd/vim-clang-format'
+    Plug 'rhysd/vim-clang-format'
 
 " nerd commenter
-Plugin 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdcommenter'
 
 " airline (powerline)
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " enhanced highlight
-Plugin 'octol/vim-cpp-enhanced-highlight'
+Plug 'octol/vim-cpp-enhanced-highlight'
 
 " ctags indexer
-Plugin 'vim-scripts/DfrankUtil'
-Plugin 'vim-scripts/vimprj'
-Plugin 'vim-scripts/indexer.tar.gz'
+Plug 'vim-scripts/DfrankUtil'
+Plug 'vim-scripts/vimprj'
+Plug 'vim-scripts/indexer.tar.gz'
 
 " UltiSnips
-Plugin 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 
 " easy motion
-Plugin 'easymotion/vim-easymotion'
+Plug 'easymotion/vim-easymotion'
 
 " A - for switching between source and header files
-Plugin 'vim-scripts/a.vim'
+Plug 'vim-scripts/a.vim'
 
 " colorscheme
 "Plug 'wombat256mod.vim'
-Plugin 'nanotech/jellybeans.vim'
-Plugin 'chriskempson/base16-vim'
-Plugin 'morhetz/gruvbox'
-Plugin 'w0ng/vim-hybrid'
-Plugin 'tpope/vim-vividchalk'
-Plugin 'lokaltog/vim-distinguished'
 
-" glsl color
-Plugin 'tikhomirov/vim-glsl'
-
-call vundle#end()		" required, all plugins must appear before this line.
+" Initialize plugin system
+call plug#end()
 
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 " filetype plugin on
-
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Settings
@@ -111,7 +98,7 @@ set incsearch                   " Incremental search
 set nobackup                    " No auto backups
 set noswapfile                  " No swap
 set t_Co=256                    " Set if term supports 256 colors.
-set number relativenumber       " Display line numbers
+set number number       " Display line numbers
 syntax enable
 let g:rehash256 = 1
 
@@ -263,7 +250,7 @@ set fillchars+=vert:\
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Other Stuff
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:python_highlight_all = 1
+"let g:python_highlight_all = 1
 
 au! BufRead,BufWrite,BufWritePost,BufNewFile *.org
 au BufEnter *.org            call org#SetOrgFileType()
@@ -278,16 +265,41 @@ set guioptions-=L  "remove left-hand scroll bar
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <C-s> :source ~/.config/nvim/init.vim<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General Setttings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"set cursorline
-set statusline=
-set statusline+=\ %m
-set statusline+=\ %y
-set statusline+=\ %r
-set statusline+=\ %F
 
-set statusline+=%= " Right side settings
-set statusline+=\ %p%%
-set statusline+=\ [%n]
+" opens nerd tree on startup
+"autocmd vimenter * NERDTree
+
+
+
+
+"coc complete  on tab press
+"inoremap <silent><expr> <TAB>
+"      \ pumvisible() ? "\<C-n>" :
+"      \ <SID>check_back_space() ? "\<TAB>" :
+"      \ coc#refresh()
+"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+
+"open nerd tree in current opened file
+ map <leader>r :NERDTreeFind<cr>
+
+ " In ~/.vim/ftplugin/javascript.vim, or somewhere similar.
+
+" Fix files with prettier, and then ESLint.
+"let b:ale_fixers = ['prettier', 'eslint']
+" Equivalent to the above.
+"let b:ale_fixers = {'javascript': ['prettier', 'eslint'
+let g:ale_fixers = {
+            \'*': ['remove_trailing_lines', 'trim_whitespace'],
+            \'python': ['add_blank_lines_for_python_control_statements', 'isort', 'autopep8', 'remove_trailing_lines','trim_whitespace',  ]
+            \}
+let g:ale_linters = {
+            \'python':['flake8', 'pydocstyle', 'mypy']
+            \}
+
+let g:ale_python_auto_pipenv=1
+let b:ale_python_auto_pipenv=1
+" Set this variable to 1 to fix files when you save them.
+let g:ale_fix_on_save = 1
+" Set this. Airline will handle the rest.
+let g:airline#extensions#ale#enabled = 1
