@@ -50,7 +50,7 @@ side of the modeline, and whose CDR is the right-hand side.")
 ;;
 ;;; Faces
 
-(defface +modeline-bar '((t (:inherit highlight)))
+(defface +modeline-bar-active '((t (:inherit highlight)))
   "Face used for left-most bar on the mode-line of an active window.")
 
 (defface +modeline-bar-inactive '((t (:inherit mode-line-inactive)))
@@ -67,14 +67,6 @@ side of the modeline, and whose CDR is the right-hand side.")
 
 ;;
 ;;; Helpers
-
-(defvar +modeline--redisplayed-p nil)
-(defadvice! modeline-recalculate-height-a (&optional _force &rest _ignored)
-  "Ensure that window resizing functions take modeline height into account."
-  :before '(fit-window-to-buffer resize-temp-buffer-window)
-  (unless +modeline--redisplayed-p
-    (setq-local +modeline--redisplayed-p t)
-    (redisplay t)))
 
 ;;; `active'
 (defvar +modeline--active-window (selected-window))
@@ -144,19 +136,20 @@ If DEFAULT is non-nil, apply to all future buffers. Modelines are defined with
 See `def-modeline!' on how modelines are defined."
   (let ((fn (intern (format "+modeline-set-%s-format-h" name))))
     (dolist (hook (doom-enlist hooks))
+      (when after-init-time
+        (dolist (name (mapcar #'car +modeline-format-alist))
+          (remove-hook hook (intern (format "+modeline-set-%s-format-h" name)))))
       (add-hook hook fn))))
 
-(defmacro def-modeline! (name lhs rhs)
+(defun def-modeline! (name lhs rhs)
   "Define a modeline format by NAME.
 LHS and RHS are the formats representing the left and right hand side of the
 mode-line, respectively. See the variable `format-mode-line' for details on what
 LHS and RHS will accept."
-  `(progn
-     (setf (alist-get ',name +modeline-format-alist)
-           (cons ,lhs ,rhs))
-     (defun ,(intern (format "+modeline-set-%s-format-h" name)) (&rest _)
-       "TODO"
-       (set-modeline! ',name))))
+  (setf (alist-get name +modeline-format-alist)
+        (cons lhs rhs))
+  (fset (intern (format "+modeline-set-%s-format-h" name))
+        (lambda (&rest _) (set-modeline! name))))
 
 (defmacro def-modeline-var! (name body &optional docstring &rest plist)
   "TODO"
@@ -193,12 +186,12 @@ LHS and RHS will accept."
         (setq +modeline-bar
               (+modeline--make-xpm
                (and +modeline-bar-width
-                    (face-background '+modeline-bar nil 'inherit))
+                    (face-background '+modeline-bar-active nil t))
                width height)
               +modeline-inactive-bar
               (+modeline--make-xpm
                (and +modeline-bar-width
-                    (face-background '+modeline-bar-inactive nil 'inherit))
+                    (face-background '+modeline-bar-inactive nil t))
                width height)))))
 
   (add-hook! 'doom-change-font-size-hook
@@ -469,16 +462,19 @@ lines are selected, or the NxM dimensions of a block selection.")
 ;;; `+modeline-encoding'
 (def-modeline-var! +modeline-encoding
   '(:eval
-    (concat (pcase (coding-system-eol-type buffer-file-coding-system)
-              (0 " LF ")
-              (1 " RLF ")
-              (2 " CR "))
+    (concat (coding-system-eol-type-mnemonic buffer-file-coding-system)
+            " "
             (let ((sys (coding-system-plist buffer-file-coding-system)))
               (if (memq (plist-get sys :category)
                         '(coding-category-undecided coding-category-utf-8))
                   "UTF-8"
-                (upcase (symbol-name (plist-get sys :name)))))
-            "  ")))
+                (upcase (symbol-name (plist-get sys :name))))))))
+
+;; Clearer mnemonic labels for EOL styles
+(setq eol-mnemonic-dos "CRLF"
+      eol-mnemonic-mac "CR"
+      eol-mnemonic-unix "LF"
+      eol-mnemonic-undecided "??")
 
 
 ;;
@@ -490,17 +486,18 @@ lines are selected, or the NxM dimensions of a block selection.")
     " "
     +modeline-buffer-identification
     +modeline-position)
-  '(""
+  `(""
     mode-line-misc-info
     +modeline-modes
     (vc-mode ("  "
               ,(all-the-icons-octicon "git-branch" :v-adjust 0.0)
               vc-mode " "))
-    " "
+    "  "
     +modeline-encoding
+    "  "
     (+modeline-checker ("" +modeline-checker "   "))))
 
-(def-modeline! project
+(def-modeline! 'project
   `(" "
     ,(all-the-icons-octicon
       "file-directory"
@@ -509,9 +506,9 @@ lines are selected, or the NxM dimensions of a block selection.")
       :height 1.25)
     (:propertize (" " (:eval (abbreviate-file-name default-directory)))
                  face bold))
-  '("" +modeline-modes))
+  '("" mode-line-misc-info +modeline-modes))
 
-(def-modeline! special
+(def-modeline! 'special
   '("" +modeline-matches
     " " +modeline-buffer-identification)
   '("" +modeline-modes))
@@ -545,7 +542,7 @@ lines are selected, or the NxM dimensions of a block selection.")
 ;; Other modes
 (set-modeline! :main 'default)
 (set-modeline-hook! '+doom-dashboard-mode-hook 'project)
-(set-modeline-hook! 'pdf-tools-enabled-hook 'pdf)
+;; (set-modeline-hook! 'pdf-tools-enabled-hook 'pdf)
 (set-modeline-hook! '(special-mode-hook
                       image-mode-hook
                       circe-mode-hook)

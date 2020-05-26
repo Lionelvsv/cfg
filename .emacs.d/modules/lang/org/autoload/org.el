@@ -62,10 +62,7 @@
              ('above (save-excursion (org-shiftmetadown))
                      (+org/table-previous-row))))
 
-          ((memq type '(headline inlinetask))
-           (let ((level (if (eq (org-element-type context) 'headline)
-                            (org-element-property :level context)
-                          1)))
+          ((let ((level (or (org-current-level) 1)))
              (pcase direction
                (`below
                 (let (org-insert-heading-respect-content)
@@ -81,13 +78,12 @@
                (org-todo (cond ((eq todo-type 'done)
                                 (car (+org-get-todo-keywords-for todo-keyword)))
                                (todo-keyword)
-                               ('todo))))))
-
-          ((user-error "Not a valid list, heading or table")))
+                               ('todo)))))))
 
     (when (org-invisible-p)
       (org-show-hidden-entry))
-    (when (bound-and-true-p evil-local-mode)
+    (when (and (bound-and-true-p evil-local-mode)
+               (not (evil-emacs-state-p)))
       (evil-insert 1))))
 
 (defun +org--get-property (name &optional bound)
@@ -239,7 +235,12 @@ If on a:
        (let ((match (and (org-at-item-checkbox-p) (match-string 1))))
          (org-toggle-checkbox (if (equal match "[ ]") '(16)))))
 
-      (_ (+org--refresh-inline-images-in-subtree)))))
+      (_
+       (if (or (org-in-regexp org-ts-regexp-both nil t)
+               (org-in-regexp org-tsr-regexp-both nil  t)
+               (org-in-regexp org-any-link-re nil t))
+           (call-interactively #'org-open-at-point)
+         (+org--refresh-inline-images-in-subtree))))))
 
 
 ;; I use this instead of `org-insert-item' or `org-insert-heading' which are too
@@ -365,6 +366,12 @@ Made for `org-tab-first-hook' in evil-mode."
         ((org-in-src-block-p t)
          (org-babel-do-in-edit-buffer
           (call-interactively #'indent-for-tab-command))
+         t)
+        ((and (save-excursion
+                (skip-chars-backward " \t")
+                (bolp))
+              (org-in-subtree-not-table-p))
+         (call-interactively #'tab-to-tab-stop)
          t)))
 
 ;;;###autoload
@@ -379,18 +386,25 @@ Made for `org-tab-first-hook' in evil-mode."
   "Tries to expand a yasnippet snippet, if one is available. Made for
 `org-tab-first-hook'."
   (when (bound-and-true-p yas-minor-mode)
-    (cond ((and (or (not (bound-and-true-p evil-local-mode))
-                    (evil-insert-state-p))
-                (yas--templates-for-key-at-point))
-           (call-interactively #'yas-expand)
-           t)
-          ((use-region-p)
-           ;; Triggering mode-specific indentation is expensive in src blocks
-           ;; (if `org-src-tab-acts-natively' is non-nil), and can cause errors,
-           ;; so we avoid smart indentation in this case.
-           (let ((yas-indent-line 'fixed))
-             (call-interactively #'yas-insert-snippet))
-           t))))
+    (and (let ((major-mode (if (org-in-src-block-p t)
+                               (org-src-get-lang-mode (org-eldoc-get-src-lang))
+                             major-mode))
+               (org-src-tab-acts-natively nil) ; causes breakages
+               ;; Smart indentation doesn't work with yasnippet, and painfully slow
+               ;; in the few cases where it does.
+               (yas-indent-line 'fixed))
+           (cond ((and (or (not (bound-and-true-p evil-local-mode))
+                           (evil-insert-state-p))
+                       (yas--templates-for-key-at-point))
+                  (yas-expand)
+                  t)
+                 ((use-region-p)
+                  (yas-insert-snippet)
+                  t)))
+         ;; HACK Yasnippet breaks org-superstar-mode because yasnippets is
+         ;;      overzealous about cleaning up overlays.
+         (when (bound-and-true-p org-superstar-mode)
+           (org-superstar-restart)))))
 
 ;;;###autoload
 (defun +org-cycle-only-current-subtree-h (&optional arg)
@@ -412,13 +426,23 @@ with `org-cycle')."
           t)))))
 
 ;;;###autoload
+(defun +org-clear-babel-results-h ()
+  "Remove the results block for the org babel block at point."
+  (when (and (org-in-src-block-p t)
+             (org-babel-where-is-src-block-result))
+    (org-babel-remove-result)
+    t))
+
+;;;###autoload
 (defun +org-unfold-to-2nd-level-or-point-h ()
-  "My version of the 'overview' #+STARTUP option: expand first-level headings.
-Expands the first level, but no further. If point was left somewhere deeper,
-unfold to point on startup."
+  "Alters '#+STARTUP overview' to only expand first-level headings.
+Expands the first level, but no further. If a different startup option was
+provided, do that instead."
   (unless org-agenda-inhibit-startup
+    ;; TODO Implement a custom #+STARTUP option?
     (when (eq org-startup-folded t)
       (outline-hide-sublevels +org-initial-fold-level))
+    ;; If point was left somewhere deeper, unfold to point on startup.
     (when (outline-invisible-p)
       (ignore-errors
         (save-excursion

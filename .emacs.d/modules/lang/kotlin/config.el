@@ -4,6 +4,7 @@
   (when (featurep! +lsp)
     (add-hook 'kotlin-mode-local-vars-hook #'lsp!))
   (set-docsets! 'kotlin-mode "Kotlin")
+  (set-repl-handler! 'kotlin-mode #'kotlin-repl)
 
   (map! :map kotlin-mode-map
         :localleader
@@ -14,5 +15,5 @@
 
 
 (use-package! flycheck-kotlin
-  :when (featurep! :tools flycheck)
+  :when (featurep! :checkers syntax)
   :hook (kotlin-mode . flycheck-kotlin-setup))

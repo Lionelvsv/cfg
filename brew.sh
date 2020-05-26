@@ -60,6 +60,9 @@ brew cask install karabiner-elements
 brew cask install typora
 brew cask install kitty
 
+brew  install jq
+brew install wget
+
 
 
 echo "installing dev apps"

@@ -19,18 +19,19 @@ This marks a foldable marker for `outline-minor-mode' in elisp buffers.")
 (use-package! elisp-mode
   :mode ("\\.Cask\\'" . emacs-lisp-mode)
   :config
-  (set-repl-handler! 'emacs-lisp-mode #'+emacs-lisp/open-repl)
-  (set-eval-handler! 'emacs-lisp-mode #'+emacs-lisp-eval)
-  (set-lookup-handlers! 'emacs-lisp-mode
-    :definition    #'elisp-def
+  (set-repl-handler! '(emacs-lisp-mode lisp-interaction-mode) #'+emacs-lisp/open-repl)
+  (set-eval-handler! '(emacs-lisp-mode lisp-interaction-mode) #'+emacs-lisp-eval)
+  (set-lookup-handlers! '(emacs-lisp-mode helpful-mode)
+    :definition    #'+emacs-lisp-lookup-definition
     :documentation #'+emacs-lisp-lookup-documentation)
-  (set-docsets! 'emacs-lisp-mode "Emacs Lisp")
+  (set-docsets! '(emacs-lisp-mode lisp-interaction-mode) "Emacs Lisp")
   (set-pretty-symbols! 'emacs-lisp-mode :lambda "lambda")
   (set-rotate-patterns! 'emacs-lisp-mode
     :symbols '(("t" "nil")
                ("let" "let*")
                ("when" "unless")
                ("advice-add" "advice-remove")
+               ("defadvice!" "undefadvice!")
                ("add-hook" "remove-hook")
                ("add-hook!" "remove-hook!")
                ("it" "xit")
@@ -42,13 +43,12 @@ This marks a foldable marker for `outline-minor-mode' in elisp buffers.")
     mode-name "Elisp"
     ;; Don't treat autoloads or sexp openers as outline headers, we have
     ;; hideshow for that.
-    outline-regexp +emacs-lisp-outline-regexp)
+    outline-regexp +emacs-lisp-outline-regexp
+    ;; Fixed indenter that intends plists sensibly.
+    lisp-indent-function #'+emacs-lisp-indent-function)
 
   ;; variable-width indentation is superior in elisp
   (add-to-list 'doom-detect-indentation-excluded-modes 'emacs-lisp-mode nil #'eq)
-
-  ;; Use helpful instead of describe-* from `company'
-  (advice-add #'elisp--company-doc-buffer :around #'doom-use-helpful-a)
 
   (add-hook! 'emacs-lisp-mode-hook
              #'outline-minor-mode
@@ -57,6 +57,13 @@ This marks a foldable marker for `outline-minor-mode' in elisp buffers.")
              #'highlight-quoted-mode
              ;; initialization
              #'+emacs-lisp-extend-imenu-h)
+
+  (autoload 'straight-register-file-modification "straight")
+  (add-hook! 'emacs-lisp-mode-hook
+    (defun +emacs-lisp-init-straight-h ()
+      (when (file-in-directory-p (or buffer-file-name default-directory) doom-local-dir)
+        (add-hook 'after-save-hook #'straight-register-file-modification
+                  nil 'local))))
 
   ;; Flycheck's two emacs-lisp checkers produce a *lot* of false positives in
   ;; emacs configs, so we disable `emacs-lisp-checkdoc' and reduce the
@@ -70,10 +77,30 @@ This marks a foldable marker for `outline-minor-mode' in elisp buffers.")
              ("^;;;###\\(autodef\\|if\\|package\\)[ \n]" (1 font-lock-warning-face t)))
            ;; highlight defined, special variables & functions
            (when +emacs-lisp-enable-extra-fontification
-             `((+emacs-lisp-highlight-vars-and-faces . +emacs-lisp--face)))))
+             `((+emacs-lisp-highlight-vars-and-faces . +emacs-lisp--face)))
+
+           `(("(package!\\_>" (0 (+emacs-lisp-truncate-pin))))))
 
   ;; Recenter window after following definition
   (advice-add #'elisp-def :after #'doom-recenter-a)
+
+  (defadvice! +emacs-lisp-append-value-to-eldoc-a (orig-fn sym)
+    "Display variable value next to documentation in eldoc."
+    :around #'elisp-get-var-docstring
+    (when-let (ret (funcall orig-fn sym))
+      (concat ret " "
+              (let* ((truncated " [...]")
+                     (limit (- (frame-width) (length ret) (length truncated) 1))
+                     (str (symbol-value sym))
+                     (str (prin1-to-string
+                           (if (stringp str)
+                               (replace-regexp-in-string "\n" "" str)
+                             str)))
+                     (str-length (length str))
+                     (short (< str-length limit)))
+                (concat (substring (propertize str 'face 'warning)
+                                   0 (if short str-length limit))
+                        (unless short truncated))))))
 
   (map! :localleader
         :map emacs-lisp-mode-map
@@ -92,7 +119,8 @@ This marks a foldable marker for `outline-minor-mode' in elisp buffers.")
           "v" #'find-variable
           "l" #'find-library)))
 
-;; Adapted from http://www.modernemacs.com/post/comint-highlighting/
+;; Adapted from http://www.modernemacs.com/post/comint-highlighting/ to add
+;; syntax highlighting to ielm REPLs.
 (add-hook! 'ielm-mode-hook
   (defun +emacs-lisp-init-syntax-highlighting-h ()
     (font-lock-add-keywords
@@ -117,11 +145,11 @@ This marks a foldable marker for `outline-minor-mode' in elisp buffers.")
 
 ;;;###package overseer
 (autoload 'overseer-test "overseer" nil t)
-(remove-hook 'emacs-lisp-mode-hook 'overseer-enable-mode)
+(remove-hook 'emacs-lisp-mode-hook #'overseer-enable-mode)
 
 
 (use-package! flycheck-cask
-  :when (featurep! :tools flycheck)
+  :when (featurep! :checkers syntax)
   :defer t
   :init
   (add-hook! 'emacs-lisp-mode-hook
@@ -167,8 +195,8 @@ This marks a foldable marker for `outline-minor-mode' in elisp buffers.")
   (set-yas-minor-mode! 'buttercup-minor-mode)
   (when (featurep 'evil)
     (add-hook 'buttercup-minor-mode-hook #'evil-normalize-keymaps))
-  (map! :map buttercup-minor-mode-map
-        :localleader
+  (map! :localleader
+        :map buttercup-minor-mode-map
         :prefix "t"
         "t" #'+emacs-lisp/buttercup-run-file
         "a" #'+emacs-lisp/buttercup-run-project

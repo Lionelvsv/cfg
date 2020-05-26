@@ -110,6 +110,7 @@ prevent the popup(s) from messing up the UI (or vice versa)."
   `(let* ((in-popup-p (+popup-buffer-p))
           (popups (+popup-windows))
           (+popup--inhibit-transient t)
+          buffer-list-update-hook
           +popup--last)
      (dolist (p popups)
        (+popup/close p 'force))
@@ -131,14 +132,16 @@ prevent the popup(s) from messing up the UI (or vice versa)."
       ("^ \\*" :slot 1 :vslot -1 :size +popup-shrink-to-fit)))
   (when (featurep! +defaults)
     '(("^\\*Completions" :ignore t)
+      ("^\\*Local variables\\*$"
+       :vslot -1 :slot 1 :size +popup-shrink-to-fit)
       ("^\\*\\(?:[Cc]ompil\\(?:ation\\|e-Log\\)\\|Messages\\)"
        :vslot -2 :size 0.3  :autosave t :quit t :ttl nil)
       ("^\\*\\(?:doom \\|Pp E\\)"  ; transient buffers (no interaction required)
        :vslot -3 :size +popup-shrink-to-fit :autosave t :select ignore :quit t :ttl 0)
       ("^\\*doom:"  ; editing buffers (interaction required)
        :vslot -4 :size 0.35 :autosave t :select t :modeline t :quit nil :ttl t)
-      ("^\\*doom:\\(?:v?term\\|eshell\\)-popup"  ; editing buffers (interaction required)
-       :vslot -5 :size 0.35 :select t :modeline t :quit nil :ttl nil)
+      ("^\\*doom:\\(?:v?term\\|e?shell\\)-popup"  ; editing buffers (interaction required)
+       :vslot -5 :size 0.35 :select t :modeline nil :quit nil :ttl nil)
       ("^\\*\\(?:Wo\\)?Man "
        :vslot -6 :size 0.45 :select t :quit t :ttl 0)
       ("^\\*Calc"

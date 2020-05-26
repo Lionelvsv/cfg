@@ -186,6 +186,10 @@ alias ciu="cd ~/Documents/learning/coding-interview-university"
 alias build="g++ -std=c++17 -Wshadow -Wall -o "%e" "%f" -g -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG"
 alias compile="g++ -std=c++17 -Wshadow -Wall -o "%e" "%f" -O2 -Wno-unused-result"
 
+alias wbd="cd ~/work/python/wagstays-backend"
+alias wfd="cd ~/work/dart/wagstays-app"
+
+alias w="cd ~/work"
 
 ### SET VI MODE IN BASH SHELL
 set -o vi
@@ -223,7 +227,7 @@ source $HOME/.cargo/env
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 #flutter config
-export PATH="$PATH:/home/lionelvsv/from_source/flutter/bin"
+export PATH="$PATH:/Users/lionelvsv/development/flutter/bin"
 # go config
 export GOROOT=/usr/local/go  
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
@@ -238,4 +242,8 @@ export GOPATH=$HOME/go-workspace # don't forget to change your path correctly!
 export GOROOT=/usr/local/opt/go/libexec
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
+#doom path
+#alias doom="~/.emacs.d"
+export PATH="$PATH:/Users/lionelvsv/.emacs.d/bin"
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
